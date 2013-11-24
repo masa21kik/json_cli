@@ -1,3 +1,39 @@
 #!/usr/bin/env ruby
-
 require 'json_cli'
+require 'thor'
+
+module JsonCli
+  class CLI < Thor
+    desc "left_join RIGHT_FILE [LEFT_FILE]", "left outer join of json files"
+    option :key, :required => true, :aliases => :k
+    def left_join(right_file, left_file = nil)
+      left_io = left_file.nil? ? STDIN : File.open(left_file, 'r')
+      right_io = File.open(right_file, 'r')
+      JsonCli::JoinJson.left_join(left_io, right_io, options[:key])
+      left_io.close
+      right_io.close
+    end
+
+    desc "right_join RIGHT_FILE [LEFT_FILE]", "right outer join of json files"
+    option :key, :required => true, :aliases => :k
+    def right_join(right_file, left_file = nil)
+      left_io = left_file.nil? ? STDIN : File.open(left_file, 'r')
+      right_io = File.open(right_file, 'r')
+      JsonCli::JoinJson.right_join(left_io, right_io, options[:key])
+      left_io.close
+      right_io.close
+    end
+
+    desc "inner_join RIGHT_FILE [LEFT_FILE]", "inner join of json files"
+    option :key, :required => true, :aliases => :k
+    def inner_join(right_file, left_file = nil)
+      left_io = left_file.nil? ? STDIN : File.open(left_file, 'r')
+      right_io = File.open(right_file, 'r')
+      JsonCli::JoinJson.inner_join(left_io, right_io, options[:key])
+      left_io.close
+      right_io.close
+    end
+  end
+end
+
+JsonCli::CLI.start(ARGV)

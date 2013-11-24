@@ -1,6 +1,6 @@
 # JsonCli
 
-TODO: Write a gem description
+JSON command line tools.
 
 ## Installation
 
@@ -18,7 +18,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Join attributes where key is '_id'
+
+    $ cat logfile.json | json_cli left_join attribute.json -k _id
+
+Unwind array or object
+
+    $ cat logfile.json | json_cli unwind -k tags
+
+Select or ignore keys
+
+    $ cat logfile.json | json_cli select -k _id,tags
 
 ## Contributing
 

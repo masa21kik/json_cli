@@ -1,5 +1,5 @@
 require "json_cli/version"
 
 module JsonCli
-  # Your code goes here...
+  require 'json_cli/join'
 end
