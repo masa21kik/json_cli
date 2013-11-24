@@ -33,6 +33,27 @@ module JsonCli
       left_io.close
       right_io.close
     end
+
+    desc "unwind_array [JSON_FILE]", "unwind array of json file"
+    option :key, :required => true, :aliases => :k
+    def unwind_array(json_file = nil)
+      io = json_file.nil? ? STDIN : File.open(json_file, 'r')
+      JsonCli::UnwindJson.unwind_array(io, options[:key])
+      io.close
+    end
+
+    desc "unwind_hash [JSON_FILE]", "unwind hash of json file"
+    option :key, :required => true, :aliases => :k
+    option :flatten, :type => :boolean, :aliases => :f
+    option :key_label
+    option :value_label
+    def unwind_hash(json_file = nil)
+      io = json_file.nil? ? STDIN : File.open(json_file, 'r')
+      opt = {}
+      options.select{|k,v| k != :key}.each{|k,v| opt[k.to_sym] = v}
+      JsonCli::UnwindJson.unwind_hash(io, options[:key], opt)
+      io.close
+    end
   end
 end
 
