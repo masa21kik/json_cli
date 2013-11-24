@@ -10,10 +10,11 @@ describe JsonCli::JoinJson do
         result = StringIO.new
         JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
         lines = result.string.each_line.to_a.map{|l| l.chomp}
-        expect(lines.size).to eq(3)
+        expect(lines.size).to eq(4)
         expect(lines[0]).to eq(%q!{"_id":"0001","timestamp":1385273700,"tags":["news","sports"],"words":{"baseball":3,"soccer":2,"ichiro":1,"honda":2},"title":"A","authors":["alice"]}!)
         expect(lines[1]).to eq(%q!{"_id":"0002","timestamp":1385273730,"tags":["sports"],"words":{"sumo":3,"tennis":1,"japan":2},"title":"B","authors":["bob","john"]}!)
         expect(lines[2]).to eq(%q!{"_id":"0003","timestamp":1385274100,"tags":["drama"],"words":{"furuhata":2,"ichiro":3}}!)
+        expect(lines[3]).to eq(%q!{"broken":"data"}!)
       end
     end
 
