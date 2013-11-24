@@ -2,6 +2,10 @@
 
 JSON command line tools.
 
+[![Build Status](https://travis-ci.org/masa21kik/json_cli.png?branch=master)](https://travis-ci.org/masa21kik/json_cli)
+[![Coverage Status](https://coveralls.io/repos/masa21kik/json_cli/badge.png)](https://coveralls.io/r/masa21kik/json_cli)
+[![Code Climate](https://codeclimate.com/github/masa21kik/json_cli.png?branch=master)](https://codeclimate.com/github/masa21kik/json_cli)
+
 ## Installation
 
 Add this line to your application's Gemfile:
