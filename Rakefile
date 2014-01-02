@@ -10,8 +10,8 @@ ruby_source = FileList['lib/**/*.rb']
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec
-task :quality => :rubocop
+task default: :spec
+task quality: :rubocop
 
 Reek::Rake::Task.new do |t|
   t.fail_on_error = false
@@ -31,7 +31,7 @@ end
 
 desc 'Analyze for code complexity'
 task :flog do
-  flog = Flog.new(:continue => true)
+  flog = Flog.new(continue: true)
   flog.flog(*ruby_source)
   threshold = 28
 
