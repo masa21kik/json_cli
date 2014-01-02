@@ -18,10 +18,12 @@ module JsonCli
     end
 
     def self.unwind_hash(io, unwind_key, opt = {})
-      opt[:out] ||= STDOUT
-      opt[:flatten] ||= false
-      opt[:key_label] ||= 'key'
-      opt[:value_label] ||= 'value'
+      opt = {
+        out: STDOUT,
+        flatten: false,
+        key_label: 'key',
+        value_label: 'value',
+      }.merge(opt)
       io.each_line do |l|
         j = MultiJson.load(l.chomp)
         if j.key?(unwind_key) && j[unwind_key].is_a?(Hash)
