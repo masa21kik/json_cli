@@ -6,7 +6,7 @@ module JsonCli
   class UnwindJson
     def self.unwind_array(io, unwind_key, opt = {})
       opt[:out] ||= STDOUT
-      io.each_line do |l|
+      io.each do |l|
         j = MultiJson.load(l.chomp)
         if j.key?(unwind_key) && j[unwind_key].is_a?(Array)
           j[unwind_key].each do |v|
@@ -22,10 +22,10 @@ module JsonCli
       opt[:out] ||= STDOUT
       opt[:key_label] ||= 'key'
       opt[:value_label] ||= 'value'
-      io.each_line do |l|
+      io.each do |l|
         j = MultiJson.load(l.chomp)
         if j.key?(unwind_key) && j[unwind_key].is_a?(Hash)
-          base = j.select { |k, v| k != unwind_key } if opt[:flatten]
+          base = j.select { |k, _| k != unwind_key } if opt[:flatten]
           j[unwind_key].each do |k, v|
             if opt[:flatten]
               jj = base.merge(opt[:key_label] => k, opt[:value_label] => v)
