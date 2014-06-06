@@ -1,112 +1,79 @@
 require 'spec_helper'
 
 describe JsonCli::JoinJson do
+  shared_examples_for 'join json' do
+    it 'join json as expected' do
+      @left_io = File.open(File.join(FIXTURE_DIR, left_file))
+      @right_io = File.open(File.join(FIXTURE_DIR, right_file))
+      expect_file_path = File.join(FIXTURE_DIR, expect_file)
+      result = StringIO.new
+      JsonCli::JoinJson.send(command, @left_io, @right_io, join_key, result)
+      expect(result.string).to eq File.read(expect_file_path)
+    end
+
+    after do
+      @left_io.close if @left_io
+      @right_io.close if @right_io
+    end
+  end
+
   describe '#left_join' do
+    let(:command) { 'left_join' }
+
     context 'when normal file input' do
-      it 'joins right to left' do
-        @left_io = File.open('spec/fixture/logfile.json', 'r')
-        @right_io = File.open('spec/fixture/attribute.json', 'r')
-        key = '_id'
-        result = StringIO.new
-        JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
-        lines = result.string.each_line.to_a.map { |l| l.chomp }
-        expect(lines.size).to eq(4)
-        expect(lines[0]).to eq(%q({"_id":"0001","timestamp":1385273700,) +
-          %q("tags":["news","sports"],"words":{"baseball":3,"soccer":2,) +
-          %q("ichiro":1,"honda":2},"title":"A","authors":["alice"]}))
-        expect(lines[1]).to eq(%q({"_id":"0002","timestamp":1385273730,) +
-          %q("tags":["sports"],"words":{"sumo":3,"tennis":1,"japan":2},) +
-          %q("title":"B","authors":["bob","john"]}))
-        expect(lines[2]).to eq(%q({"_id":"0003","timestamp":1385274100,) +
-          %q("tags":["drama"],"words":{"furuhata":2,"ichiro":3}}))
-        expect(lines[3]).to eq(%q({"broken":"data"}))
-      end
+      let(:left_file) { 'logfile.json' }
+      let(:right_file) { 'attribute.json' }
+      let(:join_key) { '_id' }
+      let(:expect_file) { 'join_logfile_attribute_id.json' }
+      it_behaves_like 'join json'
     end
 
     context 'when left is empty' do
-      it 'outputs nothing' do
-        @left_io = File.open('spec/fixture/empty.json', 'r')
-        @right_io = File.open('spec/fixture/attribute.json', 'r')
-        key = '_id'
-        result = StringIO.new
-        JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
-        lines = result.string.each_line.to_a.map { |l| l.chomp }
-        expect(lines).to be_empty
-      end
+      let(:left_file) { 'empty.json' }
+      let(:right_file) { 'attribute.json' }
+      let(:join_key) { '_id' }
+      let(:expect_file) { 'empty.json' }
+      it_behaves_like 'join json'
     end
 
     context 'when right is empty' do
-      it 'outputs just left' do
-        @left_io = File.open('spec/fixture/logfile.json', 'r')
-        @right_io = File.open('spec/fixture/empty.json', 'r')
-        key = '_id'
-        result = StringIO.new
-        JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
-        lines = result.string.each_line.to_a.map { |l| l.chomp }
-        @left_io.rewind
-        left_lines = @left_io.each.to_a.map { |l| l.chomp }
-        expect(lines).to eq(left_lines)
-      end
+      let(:left_file) { 'logfile.json' }
+      let(:right_file) { 'empty.json' }
+      let(:join_key) { '_id' }
+      let(:expect_file) { 'logfile.json' }
+      it_behaves_like 'join json'
     end
   end
 
   describe '#right_join' do
+    let(:command) { 'right_join' }
+
     context 'when normal file input' do
-      it 'joins left to right' do
-        @left_io = File.open('spec/fixture/logfile.json', 'r')
-        @right_io = File.open('spec/fixture/attribute.json', 'r')
-        key = '_id'
-        result = StringIO.new
-        JsonCli::JoinJson.right_join(@left_io, @right_io, key, result)
-        lines = result.string.each_line.to_a.map { |l| l.chomp }
-        expect(lines.size).to eq(3)
-        expect(lines[0]).to eq(%q({"_id":"0001","title":"A",) +
-          %q("authors":["alice"],"timestamp":1385273700,) +
-          %q("tags":["news","sports"],"words":{"baseball":3,) +
-          %q("soccer":2,"ichiro":1,"honda":2}}))
-        expect(lines[1]).to eq(%q({"_id":"0002","title":"B",) +
-          %q("authors":["bob","john"],"timestamp":1385273730,) +
-          %q("tags":["sports"],"words":{"sumo":3,"tennis":1,"japan":2}}))
-        expect(lines[2]).to eq(%q({"_id":"0004","title":"D",) +
-          %q("authors":["dave"]}))
-      end
+      let(:left_file) { 'logfile.json' }
+      let(:right_file) { 'attribute.json' }
+      let(:join_key) { '_id' }
+      let(:expect_file) { 'join_attribute_logfile_id.json' }
+      it_behaves_like 'join json'
     end
   end
 
   describe '#inner_join' do
+    let(:command) { 'inner_join' }
+
     context 'when normal file input' do
-      it 'joins inner' do
-        @left_io = File.open('spec/fixture/logfile.json', 'r')
-        @right_io = File.open('spec/fixture/attribute.json', 'r')
-        key = '_id'
-        result = StringIO.new
-        JsonCli::JoinJson.inner_join(@left_io, @right_io, key, result)
-        lines = result.string.each_line.to_a.map { |l| l.chomp }
-        expect(lines.size).to eq(2)
-        expect(lines[0]).to eq(%q({"_id":"0001","timestamp":1385273700,) +
-          %q("tags":["news","sports"],"words":{"baseball":3,"soccer":2,) +
-          %q("ichiro":1,"honda":2},"title":"A","authors":["alice"]}))
-        expect(lines[1]).to eq(%q({"_id":"0002","timestamp":1385273730,) +
-          %q("tags":["sports"],"words":{"sumo":3,"tennis":1,"japan":2},) +
-          %q("title":"B","authors":["bob","john"]}))
-      end
+      let(:left_file) { 'logfile.json' }
+      let(:right_file) { 'attribute.json' }
+      let(:join_key) { '_id' }
+      let(:expect_file) { 'inner_join_logfile_attribute_id.json' }
+      it_behaves_like 'join json'
     end
 
     context 'when right is empty' do
-      it 'outputs nothing' do
-        @left_io = File.open('spec/fixture/logfile.json', 'r')
-        @right_io = File.open('spec/fixture/empty.json', 'r')
-        key = '_id'
-        result = StringIO.new
-        JsonCli::JoinJson.inner_join(@left_io, @right_io, key, result)
-        lines = result.string.each_line.to_a.map { |l| l.chomp }
-        expect(lines).to be_empty
-      end
+      let(:left_file) { 'logfile.json' }
+      let(:right_file) { 'empty.json' }
+      let(:join_key) { '_id' }
+      let(:expect_file) { 'empty.json' }
+      it_behaves_like 'join json'
     end
-  end
-
-  after do
-    @left_io.close if @left_io
-    @right_io.close if @right_io
   end
 end

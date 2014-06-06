@@ -1,0 +1,3 @@
+{"_id":"0001","title":"A","authors":["alice"],"timestamp":1385273700,"tags":["news","sports"],"words":{"baseball":3,"soccer":2,"ichiro":1,"honda":2}}
+{"_id":"0002","title":"B","authors":["bob","john"],"timestamp":1385273730,"tags":["sports"],"words":{"sumo":3,"tennis":1,"japan":2}}
+{"_id":"0004","title":"D","authors":["dave"]}
