@@ -5,7 +5,7 @@ describe JsonCli::UnwindJson do
   describe '#unwind_array' do
     context 'when normal file input' do
       it 'unwinds array values' do
-        @io = File.open('spec/logfile.json', 'r')
+        @io = File.open('spec/fixture/logfile.json', 'r')
         key = 'tags'
         result = StringIO.new
         JsonCli::UnwindJson.unwind_array(@io, key, out: result)
@@ -29,7 +29,7 @@ describe JsonCli::UnwindJson do
   describe '#unwind_array' do
     context 'when normal file input' do
       it 'unwinds hash values without flatten' do
-        @io = File.open('spec/logfile.json', 'r')
+        @io = File.open('spec/fixture/logfile.json', 'r')
         key = 'words'
         result = StringIO.new
         JsonCli::UnwindJson.unwind_hash(@io, key, out: result)
@@ -57,7 +57,7 @@ describe JsonCli::UnwindJson do
       end
 
       it 'unwinds hash values with flatten' do
-        @io = File.open('spec/logfile.json', 'r')
+        @io = File.open('spec/fixture/logfile.json', 'r')
         key = 'words'
         result = StringIO.new
         JsonCli::UnwindJson.unwind_hash(

@@ -4,8 +4,8 @@ describe JsonCli::JoinJson do
   describe '#left_join' do
     context 'when normal file input' do
       it 'joins right to left' do
-        @left_io = File.open('spec/logfile.json', 'r')
-        @right_io = File.open('spec/attribute.json', 'r')
+        @left_io = File.open('spec/fixture/logfile.json', 'r')
+        @right_io = File.open('spec/fixture/attribute.json', 'r')
         key = '_id'
         result = StringIO.new
         JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
@@ -25,8 +25,8 @@ describe JsonCli::JoinJson do
 
     context 'when left is empty' do
       it 'outputs nothing' do
-        @left_io = File.open('spec/empty.json', 'r')
-        @right_io = File.open('spec/attribute.json', 'r')
+        @left_io = File.open('spec/fixture/empty.json', 'r')
+        @right_io = File.open('spec/fixture/attribute.json', 'r')
         key = '_id'
         result = StringIO.new
         JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
@@ -37,8 +37,8 @@ describe JsonCli::JoinJson do
 
     context 'when right is empty' do
       it 'outputs just left' do
-        @left_io = File.open('spec/logfile.json', 'r')
-        @right_io = File.open('spec/empty.json', 'r')
+        @left_io = File.open('spec/fixture/logfile.json', 'r')
+        @right_io = File.open('spec/fixture/empty.json', 'r')
         key = '_id'
         result = StringIO.new
         JsonCli::JoinJson.left_join(@left_io, @right_io, key, result)
@@ -53,8 +53,8 @@ describe JsonCli::JoinJson do
   describe '#right_join' do
     context 'when normal file input' do
       it 'joins left to right' do
-        @left_io = File.open('spec/logfile.json', 'r')
-        @right_io = File.open('spec/attribute.json', 'r')
+        @left_io = File.open('spec/fixture/logfile.json', 'r')
+        @right_io = File.open('spec/fixture/attribute.json', 'r')
         key = '_id'
         result = StringIO.new
         JsonCli::JoinJson.right_join(@left_io, @right_io, key, result)
@@ -76,8 +76,8 @@ describe JsonCli::JoinJson do
   describe '#inner_join' do
     context 'when normal file input' do
       it 'joins inner' do
-        @left_io = File.open('spec/logfile.json', 'r')
-        @right_io = File.open('spec/attribute.json', 'r')
+        @left_io = File.open('spec/fixture/logfile.json', 'r')
+        @right_io = File.open('spec/fixture/attribute.json', 'r')
         key = '_id'
         result = StringIO.new
         JsonCli::JoinJson.inner_join(@left_io, @right_io, key, result)
@@ -94,8 +94,8 @@ describe JsonCli::JoinJson do
 
     context 'when right is empty' do
       it 'outputs nothing' do
-        @left_io = File.open('spec/logfile.json', 'r')
-        @right_io = File.open('spec/empty.json', 'r')
+        @left_io = File.open('spec/fixture/logfile.json', 'r')
+        @right_io = File.open('spec/fixture/empty.json', 'r')
         key = '_id'
         result = StringIO.new
         JsonCli::JoinJson.inner_join(@left_io, @right_io, key, result)
