@@ -1,0 +1,10 @@
+{"_id":"0001","timestamp":1385273700,"tags":["news","sports"],"words":{"baseball":3}}
+{"_id":"0001","timestamp":1385273700,"tags":["news","sports"],"words":{"soccer":2}}
+{"_id":"0001","timestamp":1385273700,"tags":["news","sports"],"words":{"ichiro":1}}
+{"_id":"0001","timestamp":1385273700,"tags":["news","sports"],"words":{"honda":2}}
+{"_id":"0002","timestamp":1385273730,"tags":["sports"],"words":{"sumo":3}}
+{"_id":"0002","timestamp":1385273730,"tags":["sports"],"words":{"tennis":1}}
+{"_id":"0002","timestamp":1385273730,"tags":["sports"],"words":{"japan":2}}
+{"_id":"0003","timestamp":1385274100,"tags":["drama"],"words":{"furuhata":2}}
+{"_id":"0003","timestamp":1385274100,"tags":["drama"],"words":{"ichiro":3}}
+{"broken":"data"}
