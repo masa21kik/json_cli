@@ -6,10 +6,10 @@ module JsonCli
   class JoinJson
     def self.left_join(left_io, right_io, join_key, out = STDOUT)
       right = io2hash(right_io, join_key)
-      left_io.each do |l|
-        j = MultiJson.load(l.chomp)
-        j.merge!(right[j[join_key]] || {}) if j.key?(join_key)
-        out.puts MultiJson.dump(j)
+      left_io.each do |line|
+        obj = MultiJson.load(line.chomp)
+        obj.merge!(right[obj[join_key]] || {}) if obj.key?(join_key)
+        out.puts MultiJson.dump(obj)
       end
       out.flush
     end
@@ -20,20 +20,20 @@ module JsonCli
 
     def self.inner_join(left_io, right_io, join_key, out = STDOUT)
       right = io2hash(right_io, join_key)
-      left_io.each do |l|
-        j = MultiJson.load(l.chomp)
-        next if !j.key?(join_key) || !right.key?(j[join_key])
-        out.puts MultiJson.dump(j.merge(right[j[join_key]]))
+      left_io.each do |line|
+        obj = MultiJson.load(line.chomp)
+        next if !obj.key?(join_key) || !right.key?(obj[join_key])
+        out.puts MultiJson.dump(obj.merge(right[obj[join_key]]))
       end
       out.flush
     end
 
     def self.io2hash(io, key)
       hash = {}
-      io.each do |l|
-        j = MultiJson.load(l.chomp)
-        next unless j.key?(key)
-        hash[j[key]] = j.select { |k, _| k != key }
+      io.each do |line|
+        obj = MultiJson.load(line.chomp)
+        next unless obj.key?(key)
+        hash[obj[key]] = obj.select { |_k, _| _k != key }
       end
       hash
     end
