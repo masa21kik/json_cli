@@ -4,25 +4,25 @@ require 'multi_json'
 module JsonCli
   # Join JSON class
   class JoinJson
-    def self.left_join(left_io, right_io, join_key, out = STDOUT)
-      right = io2hash(right_io, join_key)
+    def self.left_join(left_io, right_io, opt)
+      right = io2hash(right_io, (jk = opt[:join_key]))
       left_io.each do |line|
         obj = MultiJson.load(line.chomp)
-        obj.merge!(right[obj[join_key]] || {}) if obj.key?(join_key)
-        out.puts MultiJson.dump(obj)
+        obj.merge!(right[obj[jk]] || {}) if obj.key?(jk)
+        opt[:out].puts MultiJson.dump(obj)
       end
     end
 
-    def self.right_join(left_io, right_io, join_key, out = STDOUT)
-      left_join(right_io, left_io, join_key, out)
+    def self.right_join(left_io, right_io, opt)
+      left_join(right_io, left_io, opt)
     end
 
-    def self.inner_join(left_io, right_io, join_key, out = STDOUT)
-      right = io2hash(right_io, join_key)
+    def self.inner_join(left_io, right_io, opt)
+      right = io2hash(right_io, (jk = opt[:join_key]))
       left_io.each do |line|
         obj = MultiJson.load(line.chomp)
-        next if !obj.key?(join_key) || !right.key?((jk_val = obj[join_key]))
-        out.puts MultiJson.dump(obj.merge(right[jk_val]))
+        next if !obj.key?(jk) || !right.key?((jk_val = obj[jk]))
+        opt[:out].puts MultiJson.dump(obj.merge(right[jk_val]))
       end
     end
 

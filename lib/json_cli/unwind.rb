@@ -4,13 +4,13 @@ require 'multi_json'
 module JsonCli
   # Unwind JSON class
   class UnwindJson
-    def self.unwind_array(io, unwind_key, opt = {})
+    def self.unwind_array(io, opt)
       io.each do |line|
         obj = MultiJson.load(line.chomp)
-        if !obj.key?(unwind_key) || !obj[unwind_key].is_a?(Array)
+        if !obj.key?((uk = opt[:unwind_key])) || !obj[uk].is_a?(Array)
           opt[:out].puts MultiJson.dump(obj)
         else
-          unwind_array_obj(obj, unwind_key, opt)
+          unwind_array_obj(obj, uk, opt)
         end
       end
     end
@@ -21,15 +21,15 @@ module JsonCli
       end
     end
 
-    def self.unwind_hash(io, unwind_key, opt = {})
+    def self.unwind_hash(io, opt)
       io.each do |line|
         obj = MultiJson.load(line.chomp)
-        if !obj.key?(unwind_key) || !obj[unwind_key].is_a?(Hash)
+        if !obj.key?((uk = opt[:unwind_key])) || !obj[uk].is_a?(Hash)
           opt[:out].puts MultiJson.dump(obj)
         elsif opt[:flatten]
-          unwind_hash_obj_flatten(obj, unwind_key, opt)
+          unwind_hash_obj_flatten(obj, uk, opt)
         else
-          unwind_hash_obj(obj, unwind_key, opt)
+          unwind_hash_obj(obj, uk, opt)
         end
       end
     end

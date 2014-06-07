@@ -7,8 +7,8 @@ describe JsonCli::UnwindJson do
       @io = File.open(File.join(FIXTURE_DIR, input_file))
       expect_file_path = File.join(FIXTURE_DIR, expect_file)
       result = StringIO.new
-      opts = options.merge(out: result)
-      JsonCli::UnwindJson.send(command, @io, unwind_key, opts)
+      opts = options.merge(out: result, unwind_key: unwind_key)
+      JsonCli::UnwindJson.send(command, @io, opts)
       expect(result.string).to eq File.read(expect_file_path)
     end
 
