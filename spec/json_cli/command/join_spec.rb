@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe JsonCli::JoinJson do
+describe JsonCli::Command::Join do
   shared_examples_for 'join json' do
     it 'join json as expected' do
       @left_io = File.open(File.join(FIXTURE_DIR, left_file))
@@ -8,7 +8,7 @@ describe JsonCli::JoinJson do
       expect_file_path = File.join(FIXTURE_DIR, expect_file)
       result = StringIO.new
       opts = options.merge(out: result, join_key: join_key)
-      JsonCli::JoinJson.send(command, @left_io, @right_io, opts)
+      described_class.send(command, @left_io, @right_io, opts)
       expect(result.string).to eq File.read(expect_file_path)
     end
 

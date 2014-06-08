@@ -2,6 +2,6 @@ require 'json_cli/version'
 
 # Base module
 module JsonCli
-  require 'json_cli/join'
-  require 'json_cli/unwind'
+  require 'json_cli/command/join'
+  require 'json_cli/command/unwind'
 end
