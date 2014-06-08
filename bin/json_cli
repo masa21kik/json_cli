@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'json_cli'
+JsonCli::CLI.start(ARGV)

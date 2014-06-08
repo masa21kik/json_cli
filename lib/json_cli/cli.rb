@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-require 'json_cli'
 require 'thor'
 
 module JsonCli
@@ -12,7 +10,7 @@ module JsonCli
     def left_join(right_file, left_file = '/dev/stdin')
       left_io = File.open(left_file, 'r')
       right_io = File.open(right_file, 'r')
-      JsonCli::Command::Join.left_join(left_io, right_io, opts)
+      JsonCli::Command::Join.new(left_io, right_io, opts).left_join
       [left_io, right_io, opts[:out]].each(&:close)
     end
 
@@ -21,7 +19,7 @@ module JsonCli
     def right_join(right_file, left_file = '/dev/stdin')
       left_io = File.open(left_file, 'r')
       right_io = File.open(right_file, 'r')
-      JsonCli::Command::Join.right_join(left_io, right_io, opts)
+      JsonCli::Command::Join.new(left_io, right_io, opts).right_join
       [left_io, right_io, opts[:out]].each(&:close)
     end
 
@@ -30,7 +28,7 @@ module JsonCli
     def inner_join(right_file, left_file = '/dev/stdin')
       left_io = File.open(left_file, 'r')
       right_io = File.open(right_file, 'r')
-      JsonCli::Command::Join.inner_join(left_io, right_io, opts)
+      JsonCli::Command::Join.new(left_io, right_io, opts).inner_join
       [left_io, right_io, opts[:out]].each(&:close)
     end
 
@@ -38,7 +36,7 @@ module JsonCli
     option :unwind_key, required: true, aliases: :k
     def unwind_array(json_file = '/dev/stdin')
       io = File.open(json_file, 'r')
-      JsonCli::Command::Unwind.unwind_array(io, opts)
+      JsonCli::Command::Unwind.new(io, opts).unwind_array
       [io, opts[:out]].each(&:close)
     end
 
@@ -49,7 +47,7 @@ module JsonCli
     option :value_label
     def unwind_hash(json_file = '/dev/stdin')
       io = File.open(json_file, 'r')
-      JsonCli::Command::Unwind.unwind_hash(io, opts)
+      JsonCli::Command::Unwind.new(io, opts).unwind_hash
       [io, opts[:out]].each(&:close)
     end
 
@@ -64,5 +62,3 @@ module JsonCli
     end
   end
 end
-
-JsonCli::CLI.start(ARGV)
