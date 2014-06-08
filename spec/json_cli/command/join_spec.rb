@@ -8,7 +8,7 @@ describe JsonCli::Command::Join do
       expect_file_path = File.join(FIXTURE_DIR, expect_file)
       result = StringIO.new
       opts = options.merge(out: result, join_key: join_key)
-      described_class.send(command, @left_io, @right_io, opts)
+      described_class.new(@left_io, @right_io, opts).send(command)
       expect(result.string).to eq File.read(expect_file_path)
     end
 

@@ -8,7 +8,7 @@ describe JsonCli::Command::Unwind do
       expect_file_path = File.join(FIXTURE_DIR, expect_file)
       result = StringIO.new
       opts = options.merge(out: result, unwind_key: unwind_key)
-      described_class.send(command, @io, opts)
+      described_class.new(@io, opts).send(command)
       expect(result.string).to eq File.read(expect_file_path)
     end
 
