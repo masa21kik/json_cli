@@ -1,14 +1,14 @@
 # -*- mode: ruby; coding: utf-8 -*-
 require 'spec_helper'
 
-describe JsonCli::UnwindJson do
+describe JsonCli::Command::Unwind do
   shared_examples_for 'unwind json' do
     it 'unwind json as expected' do
       @io = File.open(File.join(FIXTURE_DIR, input_file))
       expect_file_path = File.join(FIXTURE_DIR, expect_file)
       result = StringIO.new
-      opts = options.merge(out: result)
-      JsonCli::UnwindJson.send(command, @io, unwind_key, opts)
+      opts = options.merge(out: result, unwind_key: unwind_key)
+      described_class.new(@io, opts).send(command)
       expect(result.string).to eq File.read(expect_file_path)
     end
 

@@ -1,13 +1,14 @@
 require 'spec_helper'
 
-describe JsonCli::JoinJson do
+describe JsonCli::Command::Join do
   shared_examples_for 'join json' do
     it 'join json as expected' do
       @left_io = File.open(File.join(FIXTURE_DIR, left_file))
       @right_io = File.open(File.join(FIXTURE_DIR, right_file))
       expect_file_path = File.join(FIXTURE_DIR, expect_file)
       result = StringIO.new
-      JsonCli::JoinJson.send(command, @left_io, @right_io, join_key, result)
+      opts = options.merge(out: result, join_key: join_key)
+      described_class.new(@left_io, @right_io, opts).send(command)
       expect(result.string).to eq File.read(expect_file_path)
     end
 
@@ -24,6 +25,7 @@ describe JsonCli::JoinJson do
       let(:left_file) { 'logfile.json' }
       let(:right_file) { 'attribute.json' }
       let(:join_key) { '_id' }
+      let(:options) { {} }
       let(:expect_file) { 'join_logfile_attribute_id.json' }
       it_behaves_like 'join json'
     end
@@ -32,6 +34,7 @@ describe JsonCli::JoinJson do
       let(:left_file) { 'empty.json' }
       let(:right_file) { 'attribute.json' }
       let(:join_key) { '_id' }
+      let(:options) { {} }
       let(:expect_file) { 'empty.json' }
       it_behaves_like 'join json'
     end
@@ -40,6 +43,7 @@ describe JsonCli::JoinJson do
       let(:left_file) { 'logfile.json' }
       let(:right_file) { 'empty.json' }
       let(:join_key) { '_id' }
+      let(:options) { {} }
       let(:expect_file) { 'logfile.json' }
       it_behaves_like 'join json'
     end
@@ -52,6 +56,7 @@ describe JsonCli::JoinJson do
       let(:left_file) { 'logfile.json' }
       let(:right_file) { 'attribute.json' }
       let(:join_key) { '_id' }
+      let(:options) { {} }
       let(:expect_file) { 'join_attribute_logfile_id.json' }
       it_behaves_like 'join json'
     end
@@ -64,6 +69,7 @@ describe JsonCli::JoinJson do
       let(:left_file) { 'logfile.json' }
       let(:right_file) { 'attribute.json' }
       let(:join_key) { '_id' }
+      let(:options) { {} }
       let(:expect_file) { 'inner_join_logfile_attribute_id.json' }
       it_behaves_like 'join json'
     end
@@ -72,6 +78,7 @@ describe JsonCli::JoinJson do
       let(:left_file) { 'logfile.json' }
       let(:right_file) { 'empty.json' }
       let(:join_key) { '_id' }
+      let(:options) { {} }
       let(:expect_file) { 'empty.json' }
       it_behaves_like 'join json'
     end
