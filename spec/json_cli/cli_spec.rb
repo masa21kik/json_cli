@@ -23,25 +23,42 @@ describe JsonCli::CLI do
   end
 
   context 'join' do
+    let(:args) { [] }
+
     describe '#left_join' do
-      let(:args) { %w(attribute.json logfile.json) }
-      let(:options) { { join_key: '_id' } }
+      let(:options) do
+        {
+          join_key: '_id',
+          base_file: File.join(FIXTURE_DIR, 'logfile.json'),
+          join_file: File.join(FIXTURE_DIR, 'attribute.json')
+        }
+      end
       let(:command) { 'left_join' }
       let(:expect_file) { 'join_logfile_attribute_id.json' }
       it_behaves_like 'cli'
     end
 
     describe '#right_join' do
-      let(:args) { %w(logfile.json attribute.json) }
-      let(:options) { { join_key: '_id' } }
+      let(:options) do
+        {
+          join_key: '_id',
+          base_file: File.join(FIXTURE_DIR, 'attribute.json'),
+          join_file: File.join(FIXTURE_DIR, 'logfile.json')
+        }
+      end
       let(:command) { 'right_join' }
       let(:expect_file) { 'join_logfile_attribute_id.json' }
       it_behaves_like 'cli'
     end
 
     describe '#inner_join' do
-      let(:args) { %w(attribute.json logfile.json) }
-      let(:options) { { join_key: '_id' } }
+      let(:options) do
+        {
+          join_key: '_id',
+          base_file: File.join(FIXTURE_DIR, 'logfile.json'),
+          join_file: File.join(FIXTURE_DIR, 'attribute.json')
+        }
+      end
       let(:command) { 'inner_join' }
       let(:expect_file) { 'inner_join_logfile_attribute_id.json' }
       it_behaves_like 'cli'

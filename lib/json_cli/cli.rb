@@ -5,29 +5,35 @@ module JsonCli
   class CLI < Thor
     class_option :output, aliases: :o, default: '/dev/stdout'
 
-    desc 'left_join RIGHT_FILE [LEFT_FILE]', 'left outer join of json files'
+    desc 'left_join', 'left outer join of json files'
     option :join_key, required: true, aliases: :k
-    def left_join(right_file, left_file = '/dev/stdin')
-      left_io = File.open(left_file, 'r')
-      right_io = File.open(right_file, 'r')
+    option :join_file, required: true,  aliases: :j
+    option :base_file, aliases: :b, default: '/dev/stdin'
+    def left_join
+      left_io = File.open(options[:base_file], 'r')
+      right_io = File.open(options[:join_file], 'r')
       JsonCli::Command::Join.new(left_io, right_io, opts).left_join
       [left_io, right_io, opts[:out]].each(&:close)
     end
 
-    desc 'right_join RIGHT_FILE [LEFT_FILE]', 'right outer join of json files'
+    desc 'right_join', 'right outer join of json files'
     option :join_key, required: true, aliases: :k
-    def right_join(right_file, left_file = '/dev/stdin')
-      left_io = File.open(left_file, 'r')
-      right_io = File.open(right_file, 'r')
+    option :join_file, required: true,  aliases: :j
+    option :base_file, aliases: :b, default: '/dev/stdin'
+    def right_join
+      left_io = File.open(options[:base_file], 'r')
+      right_io = File.open(options[:join_file], 'r')
       JsonCli::Command::Join.new(left_io, right_io, opts).right_join
       [left_io, right_io, opts[:out]].each(&:close)
     end
 
-    desc 'inner_join RIGHT_FILE [LEFT_FILE]', 'inner join of json files'
+    desc 'inner_join', 'inner join of json files'
     option :join_key, required: true, aliases: :k
-    def inner_join(right_file, left_file = '/dev/stdin')
-      left_io = File.open(left_file, 'r')
-      right_io = File.open(right_file, 'r')
+    option :join_file, required: true,  aliases: :j
+    option :base_file, aliases: :b, default: '/dev/stdin'
+    def inner_join
+      left_io = File.open(options[:base_file], 'r')
+      right_io = File.open(options[:join_file], 'r')
       JsonCli::Command::Join.new(left_io, right_io, opts).inner_join
       [left_io, right_io, opts[:out]].each(&:close)
     end
